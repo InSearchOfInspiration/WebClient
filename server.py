@@ -52,7 +52,7 @@ def login():
             id = username.split('user')[1]
             user = User(id)
             login_user(user)
-            return redirect(request.args.get("next"))
+            return redirect('')
         else:
             return render_template('login.html', error='wrong pass')
     else:
