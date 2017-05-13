@@ -2,6 +2,7 @@ from flask import Flask, Response, redirect, url_for, request, session, abort
 from flask import render_template
 from flask.ext.login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user, current_user
+from request_manager import ConnectionManager
 
 app = Flask(__name__)
 
@@ -20,50 +21,71 @@ login_manager.login_view = "login"
 # silly user model
 class User(UserMixin):
 
-    def __init__(self, id):
-        self.id = id
-        self.name = "user" + str(id)
-        self.password = self.name + "_secret"
+    def __init__(self, username, password, token):
+        self.name = username
+        self.password = password
+        self.token = token
         
     def __repr__(self):
-        return "%d/%s/%s" % (int(self.id), self.name, self.password)
+        return "%s/%s" % (self.name, self.password)
 
 
-
-# create some users with ids 1 to 20       
-users = [User(id) for id in range(1, 21)]
-
-
-# some protected url
 @app.route('/')
-@login_required
 def home():
-    a_name = current_user.name
-    return render_template("index.html", name=a_name)
-
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        print(session['events'])
+        return render_template("index.html", events=session['events'])
  
-# somewhere to login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']        
-        if password == username + "_secret":
-            id = username.split('user')[1]
-            user = User(id)
-            login_user(user)
+        password = request.form['password'] 
+        a_session = ConnectionManager(username, password)     
+        if a_session.authorize():
+            token = a_session.get_token()
+            # user = User(username, password, token)
+            session['logged_in'] = True
+            session['events'] = a_session.get_events()
             return redirect('')
         else:
             return render_template('login.html', error='wrong pass')
     else:
         return render_template('login.html', error=None)
+    return home()
+
+# some protected url
+# @app.route('/')
+# @login_required
+# def home():
+#     a_name = current_user.name
+#     return render_template("index.html", name=a_name)
+
+ 
+# somewhere to login
+# @app.route("/login", methods=["GET", "POST"])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']   
+#         a_session = ConnectionManager(username, password)     
+#         if a_session.authorize():
+#             token = a_session.get_token()
+#             user = User(username, password, token)
+#             login_user(user)
+#             return redirect('')
+#         else:
+#             return render_template('login.html', error='wrong pass')
+#     else:
+#         return render_template('login.html', error=None)
 
 
 # somewhere to logout
 @app.route("/logout")
-@login_required
 def logout():
-    logout_user()
+    session['logged_in'] = False
     return redirect(url_for('login'))
 
 
@@ -76,8 +98,8 @@ def page_not_found(e):
 # callback to reload the user object        
 @login_manager.user_loader
 def load_user(userid):
-    return User(userid)
+    return User(id)
     
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5000)

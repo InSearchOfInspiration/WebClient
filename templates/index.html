@@ -4,8 +4,9 @@
 <script type="text/javascript">
 
   function ready() {
-  	// document.getElementById("events_button").click()
-    openCity('', 'Events');
+  	document.getElementById("events_button").className += " active";
+  	document.getElementById('Events').style.display = "block";
+  	// alert(document.getElementById("events_button"));
   }
 
   document.addEventListener("DOMContentLoaded", ready);
@@ -27,7 +28,6 @@
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-
 
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(cityName).style.display = "block";
