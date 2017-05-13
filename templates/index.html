@@ -2,6 +2,16 @@
 <title>Time</title>
 
 <script type="text/javascript">
+
+  function ready() {
+  	// document.getElementById("events_button").click()
+    openCity('', 'Events');
+  }
+
+  document.addEventListener("DOMContentLoaded", ready);
+
+	
+
 	function openCity(evt, cityName) {
     // Declare all variables
     var i, tabcontent, tablinks;
@@ -30,7 +40,7 @@
  unselectable="on"
  onselectstart="return false;" 
  onmousedown="return false;" class="tab">
-  <button class="tablinks" onclick="openCity(event, 'Events')">Events</button>
+  <button class="tablinks" id="events_button" onclick="openCity(event, 'Events')">Events</button>
   <button class="tablinks" onclick="openCity(event, 'Stats')">Stats</button>
   <button class="tablinks" onclick="openCity(event, 'Settings')">Settings</button>
   <button class="tablinksright" onclick="window.location.href='/logout'">Log out</button>
