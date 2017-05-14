@@ -44,18 +44,27 @@ def home():
 
         
         a_session = ConnectionManager(session['username'], session['password'], session['token'])
-        # session['events'] = a_session.get_events()
         event_list = []
-        session['categories'] = []
         for event in a_session.get_events():
             event['icon'] = icons[3]
             event_list.append(event)
-        session['events'] = event_list
-        for category in a_session.get_categories():
-            category['icon'] = icons[a_session.get_categories().index(category) % 6]
-            session['categories'].append(category)
-        session['locations'] = a_session.get_locations()
+
+        session_events = event_list
+
+        session_categories = []
+        a_categories = a_session.get_categories()
+        for category in a_categories:
+            category['icon'] = icons[a_categories.index(category) % 6]
+            session_categories.append(category)
+        
+        session_schedule = []
+        a_schedule = a_session.get_schedule()
+        for activity in a_schedule:
+            activity['icon'] = icons[a_schedule.index(activity) % 6]
+            session_schedule.append(activity)
+
         new_list = []
+        session['locations'] = a_session.get_locations()
         for location_ in session['locations']:
             new_location = {}
             new_location['lat'] = location_['latitude']
@@ -72,7 +81,7 @@ def home():
             # style='map'
         )
 
-        return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'], sndmap=sndmap)
+        return render_template("index.html", token=session['token'], events=session_events, categories=session_categories, sndmap=sndmap, schedule=session_schedule)
  
 # @app.route('/add_event/<name>')
 # def add_event(name):
@@ -84,7 +93,7 @@ def home():
 #         session['events'] = a_session.get_events()
 #         session['categories'] = a_session.get_categories()
 
-        return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'])
+        # return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'])
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

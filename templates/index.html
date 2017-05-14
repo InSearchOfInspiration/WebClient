@@ -43,7 +43,6 @@
   function ready() {
   	document.getElementById("events_button").className += " active";
   	document.getElementById('Events').style.display = "block";
-  	// alert(document.getElementById("events_button"));
   }
 
   document.addEventListener("DOMContentLoaded", ready);
@@ -51,22 +50,21 @@
 	
 
 	function openCity(evt, cityName) {
-    // Declare all variables
     var i, tabcontent, tablinks;
 
-    // Get all elements with class="tabcontent" and hide them
+
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
 
-    // Get all elements with class="tablinks" and remove the class "active"
+
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    // Show the current tab, and add an "active" class to the button that opened the tab
+
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 
@@ -110,8 +108,9 @@
  onmousedown="return false;" class="tab">
   <button class="tablinks" id="events_button" onclick="openCity(event, 'Events')">Events</button>
   <button class="tablinks" onclick="openCity(event, 'History')">History</button>
-  <button class="tablinks" onclick="openCity(event, 'Movement activity')">Movement activity</button>
+  <button class="tablinks" id="movement_button" onclick="openCity(event, 'Movement activity')">Movement activity</button>
   <button class="tablinks" onclick="openCity(event, 'Stats')">Stats</button>
+  <button class="tablinks" onclick="openCity(event, 'Schedule')">Schedule</button>
   <button class="tablinksright" onclick="window.location.href='/logout'">Log out</button>
 </div>
 
@@ -145,6 +144,14 @@
        {%endfor%}
 </div>
 
+<div id="Schedule" class="tabcontent">
+   	   {%for aevent in schedule%}
+       <div class="item" >
+       <i class="material-icons" style="font-size:60px;color:#abdcf4;">{{aevent.icon}}</i>{{aevent}}
+       </div>
+       {%endfor%}
+</div>
+
 <div id="Stats" class="tabcontent">
    <p id="piechart" style="width: 900px !important; height: 500px !important;"></p>
 </div> 
@@ -153,4 +160,8 @@
 <div class="map">
    {{sndmap.html}}
 </div>
-</div> 
+</div>
+
+
+</div>
+ 

@@ -5,7 +5,10 @@
 }
 
 
-
+.map {
+    width : 800px !important;
+    height: 600px !important;
+}
 
 /* Style the tab */
 

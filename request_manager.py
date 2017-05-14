@@ -7,7 +7,7 @@ class ConnectionManager():
     # __PASSWORD = ''
     __SERVER_URL = 'http://10.55.42.159:5000'
 
-    
+
 
     def __init__(self, username, password, token):
         self.__server_url = self.__SERVER_URL
@@ -70,6 +70,16 @@ class ConnectionManager():
     def get_locations(self):
         headers = {'Authorization':'JWT ' + self.__token}
         r = requests.get(self.__server_url+'/me/locations', headers=headers)
+        if r.status_code == 200:
+            r = json.loads(r.text)
+            return r
+        else:
+            print('[ERROR] No events')
+            return None
+
+    def get_schedule(self):
+        headers = {'Authorization':'JWT ' + self.__token}
+        r = requests.get(self.__server_url+'/me/suggested_schedule', headers=headers)
         if r.status_code == 200:
             r = json.loads(r.text)
             return r
