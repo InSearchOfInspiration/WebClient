@@ -4,7 +4,11 @@ from flask.ext.login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user, current_user
 from request_manager import ConnectionManager
 
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map
+
 app = Flask(__name__)
+GoogleMaps(app)
 
 # config
 app.config.update(
@@ -35,10 +39,29 @@ def home():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
+
+        
         a_session = ConnectionManager(session['username'], session['password'], session['token'])
         session['events'] = a_session.get_events()
         session['categories'] = a_session.get_categories()
-        return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'])
+        session['locations'] = a_session.get_locations()
+        new_list = []
+        for location_ in session['locations']:
+            new_location = {}
+            new_location['lat'] = location_['latitude']
+            new_location['lng'] = location_['longitude']
+            new_location['icon'] = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            new_location['infobox'] = '<b>' + location_['date'] + '</b>'
+            new_list.append(new_location)
+
+        sndmap = Map(
+            identifier="sndmap",
+            lat=50.4419,
+            lng=30.4419,
+            markers=new_list
+        )
+
+        return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'], sndmap=sndmap)
  
 # @app.route('/add_event/<name>')
 # def add_event(name):
@@ -67,6 +90,7 @@ def login():
             session['logged_in'] = True
             session['events'] = a_session.get_events()
             session['categories'] = a_session.get_categories()
+            session['locations'] = a_session.get_locations()
             return redirect('')
         else:
             return render_template('login.html', error='wrong pass')

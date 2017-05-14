@@ -1,6 +1,8 @@
 <!doctype html>
 <head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{{"decoupled-map"|googlemap_js(50.4419, 30.1419, markers=[(50.4419, 30.1419)])}}
+{{sndmap.js}}
 </head>
 <title>Time</title>
 
@@ -107,6 +109,7 @@
  onmousedown="return false;" class="tab">
   <button class="tablinks" id="events_button" onclick="openCity(event, 'Events')">Events</button>
   <button class="tablinks" onclick="openCity(event, 'History')">History</button>
+  <button class="tablinks" onclick="openCity(event, 'Movement activity')">Movement activity</button>
   <button class="tablinks" onclick="openCity(event, 'Stats')">Stats</button>
   <button class="tablinksright" onclick="window.location.href='/logout'">Log out</button>
 </div>
@@ -143,4 +146,8 @@
 
 <div id="Stats" class="tabcontent">
    <p id="piechart" class="graph" style="width: 100%; width: 100%;"></p>
+</div> 
+
+<div id="Movement activity" class="tabcontent">
+   {{sndmap.html}}
 </div> 

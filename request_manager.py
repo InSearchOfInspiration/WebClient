@@ -64,3 +64,13 @@ class ConnectionManager():
         else:
             print('[ERROR] No events')
             return None
+
+    def get_locations(self):
+        headers = {'Authorization':'JWT ' + self.__token}
+        r = requests.get(self.__server_url+'/me/locations', headers=headers)
+        if r.status_code == 200:
+            r = json.loads(r.text)
+            return r
+        else:
+            print('[ERROR] No events')
+            return None
