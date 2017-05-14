@@ -58,7 +58,8 @@ def home():
             identifier="sndmap",
             lat=50.4419,
             lng=30.4419,
-            markers=new_list
+            markers=new_list,
+            # style='map'
         )
 
         return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'], sndmap=sndmap)

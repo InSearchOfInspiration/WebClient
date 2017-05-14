@@ -117,6 +117,21 @@ display: block;
     height: : 100%;
 }
 
+#Stats {
+    width: 100% !important;
+    height: 500px;
+}
+
+#piechart div {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.map {
+    width: 100%;
+    height: : 100%;
+}
+
 /* Стили ссылок внутри плиток */
 .item a {
 text-decoration: none;
