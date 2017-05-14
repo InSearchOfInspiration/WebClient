@@ -116,31 +116,31 @@
 </div>
 
 <div id="Events" class="tabcontent">
-    <!-- container -->
+   
 <div class="wrapper">
-    <!-- Контейнер с адаптиными блоками -->
+    
 <div class="masonry">
-    <!-- Адаптивные блоки с содержанием -->
+    
    
        {%for category in categories%}
        <div class="item">
-       <i class="material-icons" style="font-size:60px;color:red;">cloud</i>{{category.name}}
+       <i class="material-icons" style="font-size:60px;color:#abdcf4;">{{category.icon}}</i>{{category.name}}
        </div>
        {%endfor%}
     
     
    
     </div>
-    <!-- Конец адаптивных блоков с содержанием -->
+
 </div>
-    <!-- Конец контейнера с адаптиными блоками -->
+ 
 </div>
 </div>
 
 <div id="History" class="tabcontent">
        {%for event in events%}
        <div class="item" >
-       <i class="material-icons" style="font-size:60px;color:red;">cloud</i>{{event}}
+       <i class="material-icons" style="font-size:60px;color:#abdcf4;">{{event.icon}}</i>{{event}}
        </div>
        {%endfor%}
 </div>

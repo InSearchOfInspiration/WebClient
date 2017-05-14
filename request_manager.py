@@ -7,6 +7,8 @@ class ConnectionManager():
     # __PASSWORD = ''
     __SERVER_URL = 'http://10.55.42.159:5000'
 
+    
+
     def __init__(self, username, password, token):
         self.__server_url = self.__SERVER_URL
         self.__token = token

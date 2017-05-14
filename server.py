@@ -21,6 +21,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+icons = ['web', 'today', 'textsms', 'perm_media', 'picture_in_picture', 'assignment']
+
 
 # silly user model
 class User(UserMixin):
@@ -42,8 +44,16 @@ def home():
 
         
         a_session = ConnectionManager(session['username'], session['password'], session['token'])
-        session['events'] = a_session.get_events()
-        session['categories'] = a_session.get_categories()
+        # session['events'] = a_session.get_events()
+        event_list = []
+        session['categories'] = []
+        for event in a_session.get_events():
+            event['icon'] = icons[3]
+            event_list.append(event)
+        session['events'] = event_list
+        for category in a_session.get_categories():
+            category['icon'] = icons[a_session.get_categories().index(category) % 6]
+            session['categories'].append(category)
         session['locations'] = a_session.get_locations()
         new_list = []
         for location_ in session['locations']:
@@ -89,9 +99,12 @@ def login():
             session['token'] = token
             # user = User(username, password, token)
             session['logged_in'] = True
-            session['events'] = a_session.get_events()
-            session['categories'] = a_session.get_categories()
-            session['locations'] = a_session.get_locations()
+            # session['events'] = a_session.get_events()
+            # print(session['events'])
+            # session['categories'] = a_session.get_categories()
+            # print(session['categories'])
+            # session['locations'] = a_session.get_locations()
+            # print(session['locations'])
             return redirect('')
         else:
             return render_template('login.html', error='wrong pass')
@@ -130,6 +143,8 @@ def login():
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
+    session['categories'] = []
+    session['events'] = []
     return redirect(url_for('login'))
 
 
