@@ -35,7 +35,6 @@ def home():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        print(session['events'])
         return render_template("index.html", events=session['events'])
  
 @app.route("/login", methods=["GET", "POST"])
@@ -46,6 +45,7 @@ def login():
         a_session = ConnectionManager(username, password)     
         if a_session.authorize():
             token = a_session.get_token()
+            session['token'] = token
             # user = User(username, password, token)
             session['logged_in'] = True
             session['events'] = a_session.get_events()

@@ -1,7 +1,13 @@
 <!doctype html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
 <title>Time</title>
 
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
+	server_ip = 'http://10.55.42.159:5000'
+	auth_token = '{{token}}';
 
   function ready() {
   	document.getElementById("events_button").className += " active";
@@ -32,7 +38,38 @@
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
-} 
+
+
+	} 
+
+// $.ajax({ 
+//    type : "GET", 
+//    url : server_ip+'/events', 
+//    dataType: 'jsonp',
+//      beforeSend: function(xhr) {
+//     xhr.setRequestHeader("Authorization", "JWT " + auth_token);
+//   },
+//    crossDomain: true,
+//    success: function(data, textStatus, request){
+//         alert(request.getResponseHeader('some_header'));
+//    },
+//    error: function (request, textStatus, errorThrown) {
+//         alert(request.getResponseHeader('some_header'));
+//    }
+//  });
+
+jQuery.ajax( {
+    url: server_ip + '/events',
+    type: 'GET',
+    // data: { content: 'testing test' },
+    beforeSend : function( xhr ) {
+        xhr.setRequestHeader( "Authorization", 'JWT ' + auth_token );
+    },
+    success: function( response ) {
+        alert('da');
+    }
+} );
+
 </script>
 
 <link rel="stylesheet" href="static/index/style.css">
@@ -47,8 +84,23 @@
 </div>
 
 <div id="Events" class="tabcontent">
-  <h3>London</h3>
-  <p>London is the capital city of England.</p>
+    <!-- container -->
+<div class="wrapper">
+    <!-- Контейнер с адаптиными блоками -->
+<div class="masonry">
+    <!-- Адаптивные блоки с содержанием -->
+   <div class="item">
+    
+       <i class="material-icons" style="font-size:60px;color:red;">cloud</i>
+           <br>Онлайн - В состояянии постоянного подключения... <a href="#">Подробнее »</a>
+    </div>
+    
+   
+    </div>
+    <!-- Конец адаптивных блоков с содержанием -->
+</div>
+    <!-- Конец контейнера с адаптиными блоками -->
+</div>
 </div>
 
 <div id="Stats" class="tabcontent">

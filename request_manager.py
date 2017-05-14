@@ -54,3 +54,4 @@ class ConnectionManager():
         else:
             print('[ERROR] No events')
             return None
+            
