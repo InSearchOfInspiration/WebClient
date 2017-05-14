@@ -7,9 +7,9 @@ class ConnectionManager():
     # __PASSWORD = ''
     __SERVER_URL = 'http://10.55.42.159:5000'
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, token):
         self.__server_url = self.__SERVER_URL
-        self.__token = None
+        self.__token = token
         self.__authorized = False
         self.username = username
         self.password = password
@@ -26,12 +26,13 @@ class ConnectionManager():
             r = json.loads(r.text)
 
             if r['access_token'] is not None:
+                print(r['access_token'])
                 self.__token = r['access_token']
                 self.__authorized = True
                 result = True
 
         else:
-            result = False
+            print(['ERROR no token'])
 
         return result
 
@@ -46,7 +47,6 @@ class ConnectionManager():
 
     def get_events(self):
         headers = {'Authorization':'JWT ' + self.__token}
-        print(headers)
         r = requests.get(self.__server_url+'/events', headers=headers)
         if r.status_code == 200:
             r = json.loads(r.text)
@@ -54,4 +54,13 @@ class ConnectionManager():
         else:
             print('[ERROR] No events')
             return None
-            
+
+    def get_categories(self):
+        headers = {'Authorization':'JWT ' + self.__token}
+        r = requests.get(self.__server_url+'/categories', headers=headers)
+        if r.status_code == 200:
+            r = json.loads(r.text)
+            return r
+        else:
+            print('[ERROR] No events')
+            return None

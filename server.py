@@ -35,26 +35,45 @@ def home():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return render_template("index.html", events=session['events'])
+        a_session = ConnectionManager(session['username'], session['password'], session['token'])
+        session['events'] = a_session.get_events()
+        session['categories'] = a_session.get_categories()
+        return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'])
  
+# @app.route('/add_event/<name>')
+# def add_event(name):
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+#     else:
+#         print(name)
+#         a_session = ConnectionManager(session['username'], session['password'], session['token'])
+#         session['events'] = a_session.get_events()
+#         session['categories'] = a_session.get_categories()
+
+        return render_template("index.html", token=session['token'], events=session['events'], categories=session['categories'])
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password'] 
-        a_session = ConnectionManager(username, password)     
+        a_session = ConnectionManager(username, password, '')
         if a_session.authorize():
             token = a_session.get_token()
+            session['username'] = username
+            session['password'] = password
             session['token'] = token
             # user = User(username, password, token)
             session['logged_in'] = True
             session['events'] = a_session.get_events()
+            session['categories'] = a_session.get_categories()
             return redirect('')
         else:
             return render_template('login.html', error='wrong pass')
     else:
         return render_template('login.html', error=None)
     return home()
+
 
 # some protected url
 # @app.route('/')

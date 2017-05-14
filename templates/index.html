@@ -4,10 +4,38 @@
 </head>
 <title>Time</title>
 
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script type="text/javascript">
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options = {
+          title: 'My Daily Activities'
+          // chartArea:{left:20,top:0,width:'50%',height:'75%'}
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+  
+
 	server_ip = 'http://10.55.42.159:5000'
 	auth_token = '{{token}}';
+
+  
 
   function ready() {
   	document.getElementById("events_button").className += " active";
@@ -58,17 +86,17 @@
 //    }
 //  });
 
-jQuery.ajax( {
-    url: server_ip + '/events',
-    type: 'GET',
-    // data: { content: 'testing test' },
-    beforeSend : function( xhr ) {
-        xhr.setRequestHeader( "Authorization", 'JWT ' + auth_token );
-    },
-    success: function( response ) {
-        alert('da');
-    }
-} );
+// jQuery.ajax( {
+//     url: server_ip + '/events',
+//     type: 'GET',
+//     // data: { content: 'testing test' },
+//     beforeSend : function( xhr ) {
+//         xhr.setRequestHeader( "Authorization", "JWT " + auth_token );
+//     },
+//     success: function( response ) {
+//         alert('da');
+//     }
+// } );
 
 </script>
 
@@ -78,8 +106,8 @@ jQuery.ajax( {
  onselectstart="return false;" 
  onmousedown="return false;" class="tab">
   <button class="tablinks" id="events_button" onclick="openCity(event, 'Events')">Events</button>
+  <button class="tablinks" onclick="openCity(event, 'History')">History</button>
   <button class="tablinks" onclick="openCity(event, 'Stats')">Stats</button>
-  <button class="tablinks" onclick="openCity(event, 'Settings')">Settings</button>
   <button class="tablinksright" onclick="window.location.href='/logout'">Log out</button>
 </div>
 
@@ -89,11 +117,13 @@ jQuery.ajax( {
     <!-- Контейнер с адаптиными блоками -->
 <div class="masonry">
     <!-- Адаптивные блоки с содержанием -->
-   <div class="item">
+   
+       {%for category in categories%}
+       <div class="item">
+       <i class="material-icons" style="font-size:60px;color:red;">cloud</i>{{category.name}}
+       </div>
+       {%endfor%}
     
-       <i class="material-icons" style="font-size:60px;color:red;">cloud</i>
-           <br>Онлайн - В состояянии постоянного подключения... <a href="#">Подробнее »</a>
-    </div>
     
    
     </div>
@@ -103,12 +133,14 @@ jQuery.ajax( {
 </div>
 </div>
 
-<div id="Stats" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p>
+<div id="History" class="tabcontent">
+       {%for event in events%}
+       <div class="item" >
+       <i class="material-icons" style="font-size:60px;color:red;">cloud</i>{{event}}
+       </div>
+       {%endfor%}
 </div>
 
-<div id="Settings" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
+<div id="Stats" class="tabcontent">
+   <p id="piechart" class="graph" style="width: 100%; width: 100%;"></p>
 </div> 

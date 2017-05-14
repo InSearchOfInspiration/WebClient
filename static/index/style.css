@@ -112,6 +112,11 @@ height: auto;
 display: block;
 }
 
+.graph {
+    width: 100%;
+    height: : 100%;
+}
+
 /* Стили ссылок внутри плиток */
 .item a {
 text-decoration: none;
